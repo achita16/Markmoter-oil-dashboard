@@ -1,13 +1,20 @@
 // วาง URL CSV ของ Google Sheet ที่ Publish to web ไว้ตรงนี้
 // ต้องใช้ /pub?output=csv (ไม่ใช่ /pubhtml) เพราะ fetch() ต้องการข้อมูลดิบแบบ CSV
-const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ1USobfqcmWLx3rlCr0ld-bSvAxjtQtjMn2yg2zFzhqsbv-Vz04v5I0dBT8ipsIA/pub?output=csv";
+const SHEET_CSV_URL = "รอเชื่อม Google sheet";
 const PRODUCTS = [
-  { id: "g95", code: "T01 GASOHOL 95", color: "#f5b874", remaining: 8200, capacity: 15000, rangeStart: null, rangeEnd: null },
-  { id: "g91", code: "T02 GASOHOL 91", color: "#86d4a6", remaining: 6400, capacity: 15000, rangeStart: null, rangeEnd: null },
-  { id: "e20", code: "T03 E20", color: "#b5dc8e", remaining: 5100, capacity: 15000, rangeStart: null, rangeEnd: null },
-  { id: "diesel", code: "T04 DIESEL", color: "#83c9eb", remaining: 12400, capacity: 20000, rangeStart: null, rangeEnd: null },
+  { id:"t01", code:"T01 DIESEL B7", color:"#8ecae6", remaining:20452, capacity:30000, rangeStart:null, rangeEnd:null },
+  { id:"t02", code:"T02 GASOHOL 91", color:"#90d5a5", remaining:8176, capacity:15000, rangeStart:null, rangeEnd:null },
+  { id:"t03", code:"T03 GASOHOL 95", color:"#f7c873", remaining:8218, capacity:15000, rangeStart:null, rangeEnd:null },
+  { id:"t04", code:"T04 DIESEL B7", color:"#8ecae6", remaining:16957, capacity:30000, rangeStart:null, rangeEnd:null },
+  { id:"t05", code:"T05 DIESEL B7", color:"#8ecae6", remaining:7997, capacity:15000, rangeStart:null, rangeEnd:null },
+  { id:"t06", code:"T06 Super PowerX Diesel", color:"#b8b8b8", remaining:4292, capacity:15000, rangeStart:null, rangeEnd:null },
+  { id:"t07", code:"T07 E-20", color:"#a8d85a", remaining:6020, capacity:15000, rangeStart:null, rangeEnd:null },
+  { id:"t08", code:"T08 GASOHOL 95", color:"#f7c873", remaining:7050, capacity:15000, rangeStart:null, rangeEnd:null },
 ];
-const demoSales = { g95: 1140, g91: 820, e20: 610, diesel: 1870 };
+const demoSales = {
+  t01:1870, t02:820, t03:1140, t04:1870,
+  t05:1870, t06:500, t07:610, t08:1140
+};
 let salesRows = [];
 // รถ 20,000 ลิตรมี 5 ช่องเสมอ แม้สินค้ามี 4 ประเภท
 const TRUCKS = { 20000: { name: "รถเล็ก", slots: 5 }, 30000: { name: "รถใหญ่", slots: 10 } };
@@ -84,7 +91,10 @@ function renderSlots() {
   area.innerHTML = "";
   area.dataset.slots = String(loadConfig.length);
   loadConfig.forEach((item, index) => {
-    const shortNames = { g95: "95", g91: "91", e20: "E20", diesel: "DSL" };
+    const shortNames = {
+  t01:"B7", t02:"91", t03:"95", t04:"B7",
+  t05:"B7", t06:"SP", t07:"E20", t08:"95"
+};
     const products = PRODUCTS.map(product => `<option value="${product.id}" ${product.id === item.product ? "selected" : ""}>${shortNames[product.id]}</option>`).join("");
     area.insertAdjacentHTML("beforeend", `<div class="load-slot"><p>ช่องที่ ${index + 1}</p><select data-field="product" data-index="${index}">${products}</select><select data-field="litres" data-index="${index}"><option value="0" ${!item.litres ? "selected" : ""}>—</option><option value="3000" ${item.litres === 3000 ? "selected" : ""}>3,000 L</option><option value="4000" ${item.litres === 4000 ? "selected" : ""}>4,000 L</option></select></div>`);
   });
